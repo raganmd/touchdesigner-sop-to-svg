@@ -63,6 +63,8 @@ Next let's connect a copy SOP to make 7 copies. This time let's change our rz pa
 
 Connect your copy SOP to a null SOP, now drag and drop your null onto the Polyline SOP parameter. Select a canvas size, destination directory, and name your file. Make sure to select the Polygon only SVG Type, and click save.
 
+![polylineSettings]
+
 Congratulations, you've made your second SVG out of SOPs.
 
 [plot1]:https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/21480091_1766025503697997_8211273022301011968_n.jpg
