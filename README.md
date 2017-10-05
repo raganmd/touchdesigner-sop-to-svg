@@ -67,7 +67,7 @@ Congratulations, you've made your second SVG out of SOPs.
 
 [plot1]:https://instagram.fsnc1-1.fna.fbcdn.net/t51.2885-15/e35/21480091_1766025503697997_8211273022301011968_n.jpg
 [circle3div]:https://github.com/raganmd/touchdesigner-sop-to-svg/blob/master/assets/circle.PNG
-[copyCircle]:https://github.com/raganmd/touchdesigner-sop-to-svg/blob/master/assets/copy.PNG
+[copyCircle]:https://github.com/raganmd/touchdesigner-sop-to-svg/blob/master/assets/copy1.PNG
 [polygonSettings]:https://github.com/raganmd/touchdesigner-sop-to-svg/blob/master/assets/copy1-svg-settings.PNG?raw=true
 [circle-openarc]:https://github.com/raganmd/touchdesigner-sop-to-svg/blob/master/assets/circle-openarc.PNG
 [copyCircle2]:https://github.com/raganmd/touchdesigner-sop-to-svg/blob/master/assets/copy2.PNG
