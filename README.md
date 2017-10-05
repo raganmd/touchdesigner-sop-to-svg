@@ -55,7 +55,7 @@ Congratulations, you've made your first SVG out of SOPs.
 ### Drawing Open Shapes
 Let's start with a circle SOP with 40 divisions. Let's make sure our arc type is set to open, and our arc angles are set to 90.
 
-![circle-opnearc]
+![circle-openarc]
 
 Next let's connect a copy SOP to make 7 copies. This time let's change our rz par to 45, and our uniform scale to 0.8. 
 
