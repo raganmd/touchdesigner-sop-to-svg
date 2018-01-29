@@ -33,6 +33,8 @@ Destination Directory | This should be a path to your desired directory location
 File Name | The string name for your file. The file extension .svg will be added to your saved file - you do not need to include this.
 SVG Type | Here you can choose to save an SVG that's comprised of polygons and polylines, only polylines, or only polygons. Use the appropriate menu selection to match your intended output. 
 Save SVG | Click to save to file.
+Use Camera | Toggle on to use perspective camera, Toggle off for orthographic rendering.
+Aspect | The aspect ratio for the final output. Not really used.  
  
 # Using the TOX
 Let's look at a simple use case where we want to draw both closed and open shapes.
