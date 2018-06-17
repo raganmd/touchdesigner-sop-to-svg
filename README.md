@@ -8,7 +8,24 @@ A pipeline for handling the SOP to SVG pipeline. This is especially handy for us
 This tox is written and maintained in 099.
 
 **SVG Write** - https://pypi.python.org/pypi/svgwrite/
-This tox requires the Python library SVG Write to function correctly. If you're familiar with adding external Python libraries in Touch please carry on. If that's a new process to you, I'd recommend that you read through the python documentation on the derivative wiki: https://www.derivative.ca/wiki099/index.php?title=Introduction_to_Python_Tutorial
+This tox requires the Python library SVG Write to function correctly. If you're familiar with adding external Python libraries in Touch please carry on. If that's a new process to you, I'd recommend that you read through the python documentation on the derivative wiki:  
+https://www.derivative.ca/wiki099/index.php?title=Introduction_to_Python_Tutorial
+
+## Adding Dependencies to TouchDesigner
+If you'd like to add the modules directly to your TouchDesigner folder you can do that with the following commands
+
+### **Windows**
+First install [Python 3.5.1](https://www.python.org/downloads/release/python-351/)  
+From the command line `pip install --target=/path/to/your/packages/directory/for/TD package_to_install`  
+
+There's a good chance that looks like:  
+From the command line `pip install --target="C:\Program Files\Derivative\TouchDesigner099\bin\Lib\site-packages" svgwrite`
+
+### **MacOS**
+First install [Python 3.5.1](https://www.python.org/downloads/release/python-351/)  
+`curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py`  
+`python3 get-pip.py`  
+`python3 -m pip install --target=/Applications/TouchDesigner099.app/Contents/Frameworks/Python.framework/Versions/3.5/lib/python3.5/site-packages svgwrite`
 
 # Overview
 Scalable Vector Graphics (SVG) are a handy means of creating images that aren't bound by the rules of raster graphics. Illustrators and designers often use SVGs for a variety of purposes, but they're especially interesting when it comes to interacting with plotting and cutting machinery. Laser and vinyl cutters, plotters and all manner of other devices can use SVGs rather than raster based graphics.
