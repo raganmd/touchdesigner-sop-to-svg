@@ -42,30 +42,30 @@ Let's look at a simple use case where we want to draw both closed and open shape
 ### Drawing Closed Shapes
 Let's use a circle SOP set to 3 divisions.
 
-![circle-div3](assets/circle.png)
+![circle-div3](assets/circle.PNG)
 
 Next we'll use a copy SOP to make 7 copies. Let's set the rz parameter to 8, and the uniform scale parameter to 0.8.
 
-![copy circle](assets/copy1.png)
+![copy circle](assets/copy1.PNG)
 
 Let's connect this to a null SOP, and then drag and drop the null SOP onto the Polygon SOP parameter. Select a canvas size, destination directory, and name your file. Make sure to select the Polygon only SVG Type, and click save.
 
-![svg settings](assets/copy1-svg-settings.png)
+![svg settings](assets/copy1-svg-settings.PNG)
 
 Congratulations, you've made your first SVG out of SOPs.
 
 ### Drawing Open Shapes
 Let's start with a circle SOP with 40 divisions. Let's make sure our arc type is set to open, and our arc angles are set to 90.
 
-![ope arc](assets/circle-openarc.png)
+![ope arc](assets/circle-openarc.PNG)
 
 Next let's connect a copy SOP to make 7 copies. This time let's change our rz par to 45, and our uniform scale to 0.8. 
 
-![copy sop](assets/copy2.png)
+![copy sop](assets/copy2.PNG)
 
 Connect your copy SOP to a null SOP, now drag and drop your null onto the Polyline SOP parameter. Select a canvas size, destination directory, and name your file. Make sure to select the Polygon only SVG Type, and click save.
 
-![poly line settings](assets/copy2-svg-settings.png)
+![poly line settings](assets/copy2-svg-settings.PNG)
 
 Congratulations, you've made your second SVG out of SOPs.
 
