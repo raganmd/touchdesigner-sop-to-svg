@@ -1,0 +1,11 @@
+# dependencies
+dev/dep/python/*
+release/dep/python/*
+
+# the git-pip python bits
+dev/dep/python/get-pip.py
+release/dep/python/get-pip.py
+get-pip.py
+
+# mac files
+*.DS_STORE
