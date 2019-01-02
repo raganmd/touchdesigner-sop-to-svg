@@ -69,6 +69,13 @@ def Check_dep_path():
 	else:
 		os.mkdir(dep_path)
 
+ 	# check to see if /python is in the project folder
+	if os.path.isdir(python_path):
+		pass
+	# create the direcotry if it's not there
+	else:
+		os.mkdir(python_path)
+
  	# check to see if there's a scripts and requirements folder
 	if os.path.isdir(scripts_reqs_path):
 		pass
@@ -84,40 +91,45 @@ def Check_dep_path():
 		reqs_file.write(reqs_dat.text)
 		reqs_file.close()
 
-	# check to see if our requirements elements are in place
+	# check to see if our auto-generaetd scripts are in place
 	has_win_py 		= os.path.isfile(win_py_dep)
 	has_mac_py 		= os.path.isfile(mac_py_dep)
 
 	win_py_txt 		= me.mod.extHelperMOD.win_dep(scripts_reqs_path, python_path)
-	mac_py_txt 		= me.mod.extHelperMOD.mac_dep()
-
-	if has_win_py and has_mac_py:
-		pass
-
-	else:
-		req_file 	= open(win_py_dep, 'w')
-		req_file.write(win_py_txt)
-		req_file.close()		
-
-		mac_file 	= open(mac_py_dep, 'w')
-		mac_file.write(mac_py_txt)
-		mac_file.close()
+	mac_py_txt 		= me.mod.extHelperMOD.mac_dep(scripts_reqs_path, python_path)
 
 	# identify platform
 	osPlatform 		= platform.system()
 
-	# on windows run the file in command line
+	# on windows
 	if osPlatform == "Windows":
-		if os.path.isfile(phue_path):
-			pass
+		# create the script to handle grabbing our dependencies
+		req_file 	= open(win_py_dep, 'w')
+		req_file.write(win_py_txt)
+		req_file.close()
+
+		# check to see if there is anything in the python dep dir
+		# for now we'll assume that if there are files here we
+		# successfully installed our python dependencies
+		if len(os.listdir(python_path)) == 0:
+			subprocess.Popen([win_py_dep])
 		else:
-			subprocess.Popen([win_py_dep])	
-	
+			pass				
+	# on mac
 	elif osPlatform == "Darwin":
-		if os.path.isfile(phue_path):
-			pass
-		else:
+		# create the script to handle grabbing our dependencies
+		mac_file 	= open(mac_py_dep, 'w')
+		mac_file.write(mac_py_txt)
+		mac_file.close()
+
+		# check to see if there is anything in the python dep dir
+		# for now we'll assume that if there are files here we
+		# successfully installed our python dependencies
+		if len(os.listdir(python_path)) == 0:
 			subprocess.Popen([mac_py_dep])
+		else:
+			pass
+
 	else:
 		pass
 
@@ -136,8 +148,8 @@ pip install -r {reqs}/requirements.txt --target="{target}"'''
 	
 	return formatted_win_txt
 
-def mac_dep():
-    mac_txt = '''
+def mac_dep(requirementsPath, targetPath):
+	mac_txt = '''
 #!/bin/bash 
 
 dep=$(dirname "$0")
@@ -159,6 +171,6 @@ python3 get-pip.py
 python3 -m pip install --upgrade pip
 
 # install requirements
-python3 -m pip install -r requirements.txt --target=$dep$pythonDir
-'''
-    return mac_txt
+python3 -m pip install -r {reqs}/requirements.txt --target={target}'''
+	formatted_mac_txt = mac_txt.format(reqs=requirementsPath, target=targetPath)
+	return formatted_mac_txt
