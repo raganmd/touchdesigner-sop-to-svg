@@ -1,0 +1,6 @@
+# dependencies
+dev/dep/*
+release/dep/*
+
+# mac files
+*.DS_STORE
