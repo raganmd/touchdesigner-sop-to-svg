@@ -137,10 +137,8 @@ def Check_dep_path():
 
 def win_dep(requirementsPath, targetPath):
 	win_txt = ''':: Update dependencies
-
 :: make sure pip is up to date
 python -m pip install --upgrade pip
-
 :: install requirements
 pip install -r {reqs}/requirements.txt --target="{target}"'''
 
@@ -151,25 +149,18 @@ pip install -r {reqs}/requirements.txt --target="{target}"'''
 def mac_dep(requirementsPath, targetPath):
 	mac_txt = '''
 #!/bin/bash 
-
 dep=$(dirname "$0")
 pythonDir=/python
-
 # change current direcotry to where the script is run from
 dirname "$(readlink -f "$0")"
-
 # permission to run the file
 sudo chmod 755 udpate-dep-python-mac.sh
-
 # fix up pip with python3
 curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 python3 get-pip.py
-
 # Update dependencies
-
 # make sure pip is up to date
 python3 -m pip install --upgrade pip
-
 # install requirements
 python3 -m pip install -r {reqs}/requirements.txt --target={target}'''
 	formatted_mac_txt = mac_txt.format(reqs=requirementsPath, target=targetPath)
