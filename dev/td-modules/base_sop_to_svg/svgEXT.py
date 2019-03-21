@@ -30,8 +30,6 @@ class Soptosvg:
 		self.Camera 				= parent.svg.par.Camera
 		self.Aspect 				= (parent.svg.par.Aspect1, parent.svg.par.Aspect2)
 
-
-
 		self.Axidocumentation 		= "http://wiki.evilmadscientist.com/AxiDraw"
 		self.Axipdf 				= "http://cdn.evilmadscientist.com/wiki/axidraw/software/AxiDraw_V33.pdf"
 		self.Svgwritedocumentation 	= "http://svgwrite.readthedocs.io/en/latest/svgwrite.html"
@@ -52,22 +50,17 @@ class Soptosvg:
 		newP (tuple) : tuple of x,y coordinates after camera projection. 
 
 		'''
-		
-		view = self.Camera.transform()
+		camera 		= op(self.Camera.eval())
+		view 		= camera.transform()
 		view.invert()
-		pers = self.Camera.projection( self.Aspect[1], self.Aspect[2] )
-		viewP = view * oldP
-		adjusted = pers * viewP 
-		newX = adjusted.x/adjusted.z
-		newY = adjusted.y/adjusted.z
-
-		newP = (newX, newY)
+		pers 		= camera.projection( self.Aspect[0].eval(), self.Aspect[1].eval() )
+		viewP 		= view * oldP
+		adjusted 	= pers * viewP 
+		newX 		= adjusted.x/adjusted.z
+		newY 		= adjusted.y/adjusted.z
+		newP 		= (newX, newY)
 
 		return newP
-
-
-
-
 
 	def Canvas_size(self):
 		''' This is a helper method to return the dimensions of the canvas.
