@@ -40,7 +40,7 @@ class Soptosvg:
 		return
 
 
-	def worldToCam(self, oldP):
+	def WorldToCam(self, oldP):
 		'''Method to convert worldspace coords to cameraspace coords.
 
 		Args
@@ -305,11 +305,8 @@ Check on these parameters to make sure everything is in order:\n{}'''
 
 		# Check for camera
 		if parent.svg.par.Usecamera:
-			if parent.svg.par.Camera == None or op(parent.svg.par.Camera) != "cam":
+			if parent.svg.par.Camera == None or op(parent.svg.par.Camera).type != "cam":
 				checklist.append( 'Missing Camera' )
-
-
-
 
 		else:
 			pass		
