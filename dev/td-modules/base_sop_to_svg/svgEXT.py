@@ -294,7 +294,7 @@ Check on these parameters to make sure everything is in order:\n{}'''
 
 		# handling to check for a directory path
 		if parent.svg.par.Dir == None or parent.svg.par.Dir.val == '':
-			checklist.append( 'Missing Direcotry path' )
+			checklist.append( 'Missing Directory Path' )
 		
 		else:
 			pass
