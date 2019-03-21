@@ -30,8 +30,6 @@ class Soptosvg:
 		self.Camera 				= parent.svg.par.Camera
 		self.Aspect 				= (parent.svg.par.Aspect1, parent.svg.par.Aspect2)
 
-
-
 		self.Axidocumentation 		= "http://wiki.evilmadscientist.com/AxiDraw"
 		self.Axipdf 				= "http://cdn.evilmadscientist.com/wiki/axidraw/software/AxiDraw_V33.pdf"
 		self.Svgwritedocumentation 	= "http://svgwrite.readthedocs.io/en/latest/svgwrite.html"
@@ -40,7 +38,7 @@ class Soptosvg:
 		return
 
 
-	def worldToCam(self, oldP):
+	def WorldToCam(self, oldP):
 		'''Method to convert worldspace coords to cameraspace coords.
 
 		Args
@@ -52,22 +50,17 @@ class Soptosvg:
 		newP (tuple) : tuple of x,y coordinates after camera projection. 
 
 		'''
-		
-		view = self.Camera.transform()
+		camera 		= op(self.Camera.eval())
+		view 		= camera.transform()
 		view.invert()
-		pers = self.Camera.projection( self.Aspect[1], self.Aspect[2] )
-		viewP = view * oldP
-		adjusted = pers * viewP 
-		newX = adjusted.x/adjusted.z
-		newY = adjusted.y/adjusted.z
-
-		newP = (newX, newY)
+		pers 		= camera.projection( self.Aspect[0].eval(), self.Aspect[1].eval() )
+		viewP 		= view * oldP
+		adjusted 	= pers * viewP 
+		newX 		= adjusted.x/adjusted.z
+		newY 		= adjusted.y/adjusted.z
+		newP 		= (newX, newY)
 
 		return newP
-
-
-
-
 
 	def Canvas_size(self):
 		''' This is a helper method to return the dimensions of the canvas.
@@ -294,7 +287,7 @@ Check on these parameters to make sure everything is in order:\n{}'''
 
 		# handling to check for a directory path
 		if parent.svg.par.Dir == None or parent.svg.par.Dir.val == '':
-			checklist.append( 'Missing Direcotry path' )
+			checklist.append( 'Missing Directory Path' )
 		
 		else:
 			pass
@@ -305,11 +298,8 @@ Check on these parameters to make sure everything is in order:\n{}'''
 
 		# Check for camera
 		if parent.svg.par.Usecamera:
-			if parent.svg.par.Camera == None or op(parent.svg.par.Camera) != "cam":
+			if parent.svg.par.Camera == None or op(parent.svg.par.Camera).type != "cam":
 				checklist.append( 'Missing Camera' )
-
-
-
 
 		else:
 			pass		
