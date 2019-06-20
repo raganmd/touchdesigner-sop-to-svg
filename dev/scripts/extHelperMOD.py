@@ -190,7 +190,7 @@ def win_dep(requirementsPath, targetPath):
 python -m pip install --user --upgrade pip
 
 :: install requirements
-pip install -r {reqs}/requirements.txt --target="{target}"'''
+pip install -r "{reqs}/requirements.txt" --target="{target}"'''
 
 	formatted_win_txt = win_txt.format(reqs=requirementsPath, target=targetPath)
 	
@@ -241,6 +241,6 @@ python3 get-pip.py
 python3 -m pip install --user --upgrade pip
 
 # install requirements
-python3 -m pip install -r {reqs}/requirements.txt --target={target}'''
+python3 -m pip install -r "{reqs}/requirements.txt" --target={target}'''
 	formatted_mac_txt = mac_txt.format(reqs=requirementsPath, target=targetPath)
 	return formatted_mac_txt
