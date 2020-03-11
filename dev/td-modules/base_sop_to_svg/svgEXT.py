@@ -125,109 +125,110 @@ class Soptosvg:
 
 		# ok in order to make this work we first see if instancing is turned on with the parent geo otherwise we don't need to iterate
 		myGeo = op(self.Geocomp)
-		if myGeo.par.instancing == True:
-			# ok so instancing, we'll need to grab a few things here to make sure we can do what is needed
-			numInstances = 0
-			if myGeo.par.instancecountmode == 0: # manual
-				numInstances = myGeo.par.numinstances
-			else:
-				if myGeo.par.instanceop:
-					numInstances = op(myGeo.par.instanceop).numSamples
-				elif myGeo.par.instancetop:
-					numInstances = op(myGeo.par.instancetop).numSamples
-				elif myGeo.par.instancerop:
-					numInstances = op(myGeo.par.instancerop).numSamples
-				elif myGeo.par.instancesop:
-					numInstances = op(myGeo.par.instancesop).numSamples
-				elif myGeo.par.instancepop:
-					numInstances = op(myGeo.par.instancepop).numSamples
+		if myGeo:
+			if myGeo.par.instancing == True:
+				# ok so instancing, we'll need to grab a few things here to make sure we can do what is needed
+				numInstances = 0
+				if myGeo.par.instancecountmode == 0: # manual
+					numInstances = myGeo.par.numinstances
 				else:
-					print("no instance OPs found!")
-			
-			for i in range(numInstances):
-				itop = op(myGeo.par.instancetop)
-				if itop:
-					try:
-						tx = itop[str(myGeo.par.instancetx)][i] # needs to be string otherwise it just gives us a value we don't want
-					except:
-						tx = 0
-					try:
-						ty = itop[str(myGeo.par.instancety)][i]
-					except:
-						ty = 0
-					try:
-						tz = itop[str(myGeo.par.instancetz)][i]
-					except:
-						tz = 0
-				
-				irop = op(myGeo.par.instancerop)
-				if irop:
-					try:
-						rx = irop[str(myGeo.par.instancerx)][i]
-					except:
-						rx = 0
-					try:
-						ry = irop[str(myGeo.par.instancery)][i]
-					except:
-						ry = 0
-					try:
-						rz = irop[str(myGeo.par.instancerz)][i]
-					except:
-						rz = 0
-
-				isop = op(myGeo.par.instancesop)
-				if isop:
-					try:
-						sx = isop[myGeo.par.instancesx][i]
-					except:
-						sx = 1
-					try:
-						sy = isop[myGeo.par.instancesy][i]
-					except:
-						sy = 1
-					try:
-						sz = isop[myGeo.par.instancesz][i]
-					except:
-						sz = 1
-
-				for item in prims:
-					newPoints = []
-
-					if self.UseCamera:
-						#newPoints 	= [self.WorldToCam(vert.point.P) for vert in item ]
-						for vert in item:
-							p = vert.point.P
-							
-							qrx = tdu.Quaternion(rx, tdu.Vector(1, 0, 0))
-							qry = tdu.Quaternion(ry, tdu.Vector(0, 1, 0))
-							qrz = tdu.Quaternion(rz, tdu.Vector(0, 0, 1))
-							
-							p = qrx.rotate(p)
-							p = qry.rotate(p)
-							p = qrz.rotate(p)
-							
-							p.scale(sx,sy,sz)
-
-							# move each instance to its position
-							p = tdu.Position(p)
-							p.translate(tx,ty,tz)
-
-							p = self.WorldToCam(p)
-							p = (p[0], -p[1]) # somehow our Y axis is inverted
-							if(math.isnan(p[0]) == False):
-								newPoints.append(p)
+					if myGeo.par.instanceop:
+						numInstances = op(myGeo.par.instanceop).numSamples
+					elif myGeo.par.instancetop:
+						numInstances = op(myGeo.par.instancetop).numSamples
+					elif myGeo.par.instancerop:
+						numInstances = op(myGeo.par.instancerop).numSamples
+					elif myGeo.par.instancesop:
+						numInstances = op(myGeo.par.instancesop).numSamples
+					elif myGeo.par.instancepop:
+						numInstances = op(myGeo.par.instancepop).numSamples
 					else:
-						#newPoints 	= [(vert.point.x,vert.point.y) for vert in item ]
-						for vert in item:
-							p = self.rotate_origin_only( (vert.point.x * sx, vert.point.y * sy), -math.radians(rx) )
-							p = (p[0] + tx, (p[1] + ty)*-1)
-
-							if(math.isnan(p[0]) == False):
-								newPoints.append(p)
-
+						print("no instance OPs found!")
+				
+				for i in range(numInstances):
+					itop = op(myGeo.par.instancetop)
+					if itop:
+						try:
+							tx = itop[str(myGeo.par.instancetx)][i] # needs to be string otherwise it just gives us a value we don't want
+						except:
+							tx = 0
+						try:
+							ty = itop[str(myGeo.par.instancety)][i]
+						except:
+							ty = 0
+						try:
+							tz = itop[str(myGeo.par.instancetz)][i]
+						except:
+							tz = 0
 					
-					newPoly		= dwg.polyline(points=newPoints, stroke='black', stroke_width=1, fill='none')
-					dwg.add(newPoly)
+					irop = op(myGeo.par.instancerop)
+					if irop:
+						try:
+							rx = irop[str(myGeo.par.instancerx)][i]
+						except:
+							rx = 0
+						try:
+							ry = irop[str(myGeo.par.instancery)][i]
+						except:
+							ry = 0
+						try:
+							rz = irop[str(myGeo.par.instancerz)][i]
+						except:
+							rz = 0
+
+					isop = op(myGeo.par.instancesop)
+					if isop:
+						try:
+							sx = isop[myGeo.par.instancesx][i]
+						except:
+							sx = 1
+						try:
+							sy = isop[myGeo.par.instancesy][i]
+						except:
+							sy = 1
+						try:
+							sz = isop[myGeo.par.instancesz][i]
+						except:
+							sz = 1
+
+					for item in prims:
+						newPoints = []
+
+						if self.UseCamera:
+							#newPoints 	= [self.WorldToCam(vert.point.P) for vert in item ]
+							for vert in item:
+								p = vert.point.P
+								
+								qrx = tdu.Quaternion(rx, tdu.Vector(1, 0, 0))
+								qry = tdu.Quaternion(ry, tdu.Vector(0, 1, 0))
+								qrz = tdu.Quaternion(rz, tdu.Vector(0, 0, 1))
+								
+								p = qrx.rotate(p)
+								p = qry.rotate(p)
+								p = qrz.rotate(p)
+								
+								p.scale(sx,sy,sz)
+
+								# move each instance to its position
+								p = tdu.Position(p)
+								p.translate(tx,ty,tz)
+
+								p = self.WorldToCam(p)
+								p = (p[0], -p[1]) # somehow our Y axis is inverted
+								if(math.isnan(p[0]) == False):
+									newPoints.append(p)
+						else:
+							#newPoints 	= [(vert.point.x,vert.point.y) for vert in item ]
+							for vert in item:
+								p = self.rotate_origin_only( (vert.point.x * sx, vert.point.y * sy), -math.radians(rx) )
+								p = (p[0] + tx, (p[1] + ty)*-1)
+
+								if(math.isnan(p[0]) == False):
+									newPoints.append(p)
+
+						
+						newPoly		= dwg.polyline(points=newPoints, stroke='black', stroke_width=1, fill='none')
+						dwg.add(newPoly)
 		
 		else:
 
@@ -274,110 +275,111 @@ class Soptosvg:
 
 		# ok in order to make this work we first see if instancing is turned on with the parent geo otherwise we don't need to iterate
 		myGeo = op(self.Geocomp)
-		if myGeo.par.instancing == True:
-			# ok so instancing, we'll need to grab a few things here to make sure we can do what is needed
-			numInstances = 0
-			if myGeo.par.instancecountmode == 0: # manual
-				numInstances = myGeo.par.numinstances
-			else:
-				if myGeo.par.instanceop:
-					numInstances = op(myGeo.par.instanceop).numSamples
-				elif myGeo.par.instancetop:
-					numInstances = op(myGeo.par.instancetop).numSamples
-				elif myGeo.par.instancerop:
-					numInstances = op(myGeo.par.instancerop).numSamples
-				elif myGeo.par.instancesop:
-					numInstances = op(myGeo.par.instancesop).numSamples
-				elif myGeo.par.instancepop:
-					numInstances = op(myGeo.par.instancepop).numSamples
+		if myGeo:
+			if myGeo.par.instancing == True:
+				# ok so instancing, we'll need to grab a few things here to make sure we can do what is needed
+				numInstances = 0
+				if myGeo.par.instancecountmode == 0: # manual
+					numInstances = myGeo.par.numinstances
 				else:
-					print("no instance OPs found!")
-			
-			for i in range(numInstances):
-				itop = op(myGeo.par.instancetop)
-				if itop:
-					try:
-						tx = itop[str(myGeo.par.instancetx)][i] # needs to be string otherwise it just gives us a value we don't want
-					except:
-						tx = 0
-					try:
-						ty = itop[str(myGeo.par.instancety)][i]
-					except:
-						ty = 0
-					try:
-						tz = itop[str(myGeo.par.instancetz)][i]
-					except:
-						tz = 0
-				
-				irop = op(myGeo.par.instancerop)
-				if irop:
-					try:
-						rx = irop[str(myGeo.par.instancerx)][i]
-					except:
-						rx = 0
-					try:
-						ry = irop[str(myGeo.par.instancery)][i]
-					except:
-						ry = 0
-					try:
-						rz = irop[str(myGeo.par.instancerz)][i]
-					except:
-						rz = 0
-
-				isop = op(myGeo.par.instancesop)
-				if isop:
-					try:
-						sx = isop[myGeo.par.instancesx][i]
-					except:
-						sx = 1
-					try:
-						sy = isop[myGeo.par.instancesy][i]
-					except:
-						sy = 1
-					try:
-						sz = isop[myGeo.par.instancesz][i]
-					except:
-						sz = 1
-
-				
-				for item in prims:
-					newPoints = []
-					if self.UseCamera:
-						#newPoints 	= [self.WorldToCam(vert.point.P) for vert in item ]
-						for vert in item:
-							p = vert.point.P
-							
-							qrx = tdu.Quaternion(rx, tdu.Vector(1, 0, 0))
-							qry = tdu.Quaternion(ry, tdu.Vector(0, 1, 0))
-							qrz = tdu.Quaternion(rz, tdu.Vector(0, 0, 1))
-							
-							p = qrx.rotate(p)
-							p = qry.rotate(p)
-							p = qrz.rotate(p)
-							
-							p.scale(sx,sy,sz)
-
-							# move each instance to its position
-							p = tdu.Position(p)
-							p.translate(tx,ty,tz)
-
-							p = self.WorldToCam(p)
-							p = (p[0], -p[1]) # somehow our Y axis is inverted
-							if(math.isnan(p[0]) == False):
-								newPoints.append(p)
+					if myGeo.par.instanceop:
+						numInstances = op(myGeo.par.instanceop).numSamples
+					elif myGeo.par.instancetop:
+						numInstances = op(myGeo.par.instancetop).numSamples
+					elif myGeo.par.instancerop:
+						numInstances = op(myGeo.par.instancerop).numSamples
+					elif myGeo.par.instancesop:
+						numInstances = op(myGeo.par.instancesop).numSamples
+					elif myGeo.par.instancepop:
+						numInstances = op(myGeo.par.instancepop).numSamples
 					else:
-						for vert in item:
-							#newPoints 	= [(vert.point.x,vert.point.y) for vert in item ]
-							#p = (vert.point.x + tx, vert.point.y + ty)
-							p = self.rotate_origin_only( (vert.point.x * sx, vert.point.y * sy), -math.radians(rx) )
-							p = (p[0] + tx, (p[1] + ty)*-1)
+						print("no instance OPs found!")
+				
+				for i in range(numInstances):
+					itop = op(myGeo.par.instancetop)
+					if itop:
+						try:
+							tx = itop[str(myGeo.par.instancetx)][i] # needs to be string otherwise it just gives us a value we don't want
+						except:
+							tx = 0
+						try:
+							ty = itop[str(myGeo.par.instancety)][i]
+						except:
+							ty = 0
+						try:
+							tz = itop[str(myGeo.par.instancetz)][i]
+						except:
+							tz = 0
+					
+					irop = op(myGeo.par.instancerop)
+					if irop:
+						try:
+							rx = irop[str(myGeo.par.instancerx)][i]
+						except:
+							rx = 0
+						try:
+							ry = irop[str(myGeo.par.instancery)][i]
+						except:
+							ry = 0
+						try:
+							rz = irop[str(myGeo.par.instancerz)][i]
+						except:
+							rz = 0
+
+					isop = op(myGeo.par.instancesop)
+					if isop:
+						try:
+							sx = isop[myGeo.par.instancesx][i]
+						except:
+							sx = 1
+						try:
+							sy = isop[myGeo.par.instancesy][i]
+						except:
+							sy = 1
+						try:
+							sz = isop[myGeo.par.instancesz][i]
+						except:
+							sz = 1
+
+					
+					for item in prims:
+						newPoints = []
+						if self.UseCamera:
+							#newPoints 	= [self.WorldToCam(vert.point.P) for vert in item ]
+							for vert in item:
+								p = vert.point.P
+								
+								qrx = tdu.Quaternion(rx, tdu.Vector(1, 0, 0))
+								qry = tdu.Quaternion(ry, tdu.Vector(0, 1, 0))
+								qrz = tdu.Quaternion(rz, tdu.Vector(0, 0, 1))
+								
+								p = qrx.rotate(p)
+								p = qry.rotate(p)
+								p = qrz.rotate(p)
+								
+								p.scale(sx,sy,sz)
+
+								# move each instance to its position
+								p = tdu.Position(p)
+								p.translate(tx,ty,tz)
+
+								p = self.WorldToCam(p)
+								p = (p[0], -p[1]) # somehow our Y axis is inverted
+								if(math.isnan(p[0]) == False):
+									newPoints.append(p)
+						else:
+							for vert in item:
+								#newPoints 	= [(vert.point.x,vert.point.y) for vert in item ]
+								#p = (vert.point.x + tx, vert.point.y + ty)
+								p = self.rotate_origin_only( (vert.point.x * sx, vert.point.y * sy), -math.radians(rx) )
+								p = (p[0] + tx, (p[1] + ty)*-1)
 
 
-							if(math.isnan(p[0]) == False):
-								newPoints.append(p)
+								if(math.isnan(p[0]) == False):
+									newPoints.append(p)
 
-					newPoly		= dwg.polygon(points=newPoints, stroke='black', stroke_width=1, fill='none')
-					dwg.add(newPoly)
+						newPoly		= dwg.polygon(points=newPoints, stroke='black', stroke_width=1, fill='none')
+						dwg.add(newPoly)
 
 		else:
 
@@ -423,150 +425,151 @@ class Soptosvg:
 
 		# ok in order to make this work we first see if instancing is turned on with the parent geo otherwise we don't need to iterate
 		myGeo = op(self.Geocomp)
-		if myGeo.par.instancing == True:
-			# ok so instancing, we'll need to grab a few things here to make sure we can do what is needed
-			numInstances = 0
-			if myGeo.par.instancecountmode == 0: # manual
-				numInstances = myGeo.par.numinstances
-			else:
-				if myGeo.par.instanceop:
-					numInstances = op(myGeo.par.instanceop).numSamples
-				elif myGeo.par.instancetop:
-					numInstances = op(myGeo.par.instancetop).numSamples
-				elif myGeo.par.instancerop:
-					numInstances = op(myGeo.par.instancerop).numSamples
-				elif myGeo.par.instancesop:
-					numInstances = op(myGeo.par.instancesop).numSamples
-				elif myGeo.par.instancepop:
-					numInstances = op(myGeo.par.instancepop).numSamples
+		if myGeo:
+			if myGeo.par.instancing == True:
+				# ok so instancing, we'll need to grab a few things here to make sure we can do what is needed
+				numInstances = 0
+				if myGeo.par.instancecountmode == 0: # manual
+					numInstances = myGeo.par.numinstances
 				else:
-					print("no instance OPs found!")
-			
-			for i in range(numInstances):
-				itop = op(myGeo.par.instancetop)
-				if itop:
-					try:
-						tx = itop[str(myGeo.par.instancetx)][i] # needs to be string otherwise it just gives us a value we don't want
-					except:
-						tx = 0
-					try:
-						ty = itop[str(myGeo.par.instancety)][i]
-					except:
-						ty = 0
-					try:
-						tz = itop[str(myGeo.par.instancetz)][i]
-					except:
-						tz = 0
-				
-				irop = op(myGeo.par.instancerop)
-				if irop:
-					try:
-						rx = irop[str(myGeo.par.instancerx)][i]
-					except:
-						rx = 0
-					try:
-						ry = irop[str(myGeo.par.instancery)][i]
-					except:
-						ry = 0
-					try:
-						rz = irop[str(myGeo.par.instancerz)][i]
-					except:
-						rz = 0
-
-				isop = op(myGeo.par.instancesop)
-				if isop:
-					try:
-						sx = isop[myGeo.par.instancesx][i]
-					except:
-						sx = 1
-					try:
-						sy = isop[myGeo.par.instancesy][i]
-					except:
-						sy = 1
-					try:
-						sz = isop[myGeo.par.instancesz][i]
-					except:
-						sz = 1
-
-				pgonPrims 		= pgon.prims
-				plinePrims 		= pline.prims
-
-				for item in pgonPrims:
-					newPoints = []
-					if self.UseCamera:
-						#newPoints 	= [self.WorldToCam(vert.point.P) for vert in item ]
-						for vert in item:
-							p = vert.point.P
-							
-							qrx = tdu.Quaternion(rx, tdu.Vector(1, 0, 0))
-							qry = tdu.Quaternion(ry, tdu.Vector(0, 1, 0))
-							qrz = tdu.Quaternion(rz, tdu.Vector(0, 0, 1))
-							
-							p = qrx.rotate(p)
-							p = qry.rotate(p)
-							p = qrz.rotate(p)
-							
-							p.scale(sx,sy,sz)
-
-							# move each instance to its position
-							p = tdu.Position(p)
-							p.translate(tx,ty,tz)
-
-							p = self.WorldToCam(p)
-							p = (p[0], -p[1]) # somehow our Y axis is inverted
-							if(math.isnan(p[0]) == False):
-								newPoints.append(p)
+					if myGeo.par.instanceop:
+						numInstances = op(myGeo.par.instanceop).numSamples
+					elif myGeo.par.instancetop:
+						numInstances = op(myGeo.par.instancetop).numSamples
+					elif myGeo.par.instancerop:
+						numInstances = op(myGeo.par.instancerop).numSamples
+					elif myGeo.par.instancesop:
+						numInstances = op(myGeo.par.instancesop).numSamples
+					elif myGeo.par.instancepop:
+						numInstances = op(myGeo.par.instancepop).numSamples
 					else:
-						#newPoints 	= [(vert.point.x,vert.point.y) for vert in item ]
-						for vert in item:
-							#p = (vert.point.x + tx, vert.point.y + ty)
-							p = self.rotate_origin_only( (vert.point.x * sx, vert.point.y * sy), -math.radians(rx) )
-							p = (p[0] + tx, (p[1] + ty)*-1)
-
-							if(math.isnan(p[0]) == False):
-								newPoints.append(p)
-					if newPoints:
-						newPoly		= dwg.polygon(points=newPoints, stroke='black', stroke_width=1, fill='none')
-					if newPoly:
-						dwg.add(newPoly)
+						print("no instance OPs found!")
 				
-				for item in plinePrims:
-					newPoints = []
-					if self.UseCamera:
-						#newPoints 	= [self.WorldToCam(vert.point.P) for vert in item ]
-						for vert in item:
-							p = vert.point.P
-							
-							qrx = tdu.Quaternion(rx, tdu.Vector(1, 0, 0))
-							qry = tdu.Quaternion(ry, tdu.Vector(0, 1, 0))
-							qrz = tdu.Quaternion(rz, tdu.Vector(0, 0, 1))
-							
-							p = qrx.rotate(p)
-							p = qry.rotate(p)
-							p = qrz.rotate(p)
-							
-							p.scale(sx,sy,sz)
+				for i in range(numInstances):
+					itop = op(myGeo.par.instancetop)
+					if itop:
+						try:
+							tx = itop[str(myGeo.par.instancetx)][i] # needs to be string otherwise it just gives us a value we don't want
+						except:
+							tx = 0
+						try:
+							ty = itop[str(myGeo.par.instancety)][i]
+						except:
+							ty = 0
+						try:
+							tz = itop[str(myGeo.par.instancetz)][i]
+						except:
+							tz = 0
+					
+					irop = op(myGeo.par.instancerop)
+					if irop:
+						try:
+							rx = irop[str(myGeo.par.instancerx)][i]
+						except:
+							rx = 0
+						try:
+							ry = irop[str(myGeo.par.instancery)][i]
+						except:
+							ry = 0
+						try:
+							rz = irop[str(myGeo.par.instancerz)][i]
+						except:
+							rz = 0
 
-							# move each instance to its position
-							p = tdu.Position(p)
-							p.translate(tx,ty,tz)
+					isop = op(myGeo.par.instancesop)
+					if isop:
+						try:
+							sx = isop[myGeo.par.instancesx][i]
+						except:
+							sx = 1
+						try:
+							sy = isop[myGeo.par.instancesy][i]
+						except:
+							sy = 1
+						try:
+							sz = isop[myGeo.par.instancesz][i]
+						except:
+							sz = 1
 
-							p = self.WorldToCam(p)
-							p = (p[0], -p[1]) # somehow our Y axis is inverted
-							if(math.isnan(p[0]) == False):
-								newPoints.append(p)
-					else:
-						#newPoints 	= [(vert.point.x,vert.point.y) for vert in item ]
-						for vert in item:
-							p = self.rotate_origin_only( (vert.point.x * sx, vert.point.y * sy), -math.radians(rx) )
-							p = (p[0] + tx, (p[1] + ty)*-1)
+					pgonPrims 		= pgon.prims
+					plinePrims 		= pline.prims
 
-							if(math.isnan(p[0]) == False):
-								newPoints.append(p)
-					if newPoints:
-						newPoly		= dwg.polyline(points=newPoints, stroke='black', stroke_width=1, fill='none')
-					if newPoly:
-						dwg.add(newPoly)
+					for item in pgonPrims:
+						newPoints = []
+						if self.UseCamera:
+							#newPoints 	= [self.WorldToCam(vert.point.P) for vert in item ]
+							for vert in item:
+								p = vert.point.P
+								
+								qrx = tdu.Quaternion(rx, tdu.Vector(1, 0, 0))
+								qry = tdu.Quaternion(ry, tdu.Vector(0, 1, 0))
+								qrz = tdu.Quaternion(rz, tdu.Vector(0, 0, 1))
+								
+								p = qrx.rotate(p)
+								p = qry.rotate(p)
+								p = qrz.rotate(p)
+								
+								p.scale(sx,sy,sz)
+
+								# move each instance to its position
+								p = tdu.Position(p)
+								p.translate(tx,ty,tz)
+
+								p = self.WorldToCam(p)
+								p = (p[0], -p[1]) # somehow our Y axis is inverted
+								if(math.isnan(p[0]) == False):
+									newPoints.append(p)
+						else:
+							#newPoints 	= [(vert.point.x,vert.point.y) for vert in item ]
+							for vert in item:
+								#p = (vert.point.x + tx, vert.point.y + ty)
+								p = self.rotate_origin_only( (vert.point.x * sx, vert.point.y * sy), -math.radians(rx) )
+								p = (p[0] + tx, (p[1] + ty)*-1)
+
+								if(math.isnan(p[0]) == False):
+									newPoints.append(p)
+						if newPoints:
+							newPoly		= dwg.polygon(points=newPoints, stroke='black', stroke_width=1, fill='none')
+						if newPoly:
+							dwg.add(newPoly)
+					
+					for item in plinePrims:
+						newPoints = []
+						if self.UseCamera:
+							#newPoints 	= [self.WorldToCam(vert.point.P) for vert in item ]
+							for vert in item:
+								p = vert.point.P
+								
+								qrx = tdu.Quaternion(rx, tdu.Vector(1, 0, 0))
+								qry = tdu.Quaternion(ry, tdu.Vector(0, 1, 0))
+								qrz = tdu.Quaternion(rz, tdu.Vector(0, 0, 1))
+								
+								p = qrx.rotate(p)
+								p = qry.rotate(p)
+								p = qrz.rotate(p)
+								
+								p.scale(sx,sy,sz)
+
+								# move each instance to its position
+								p = tdu.Position(p)
+								p.translate(tx,ty,tz)
+
+								p = self.WorldToCam(p)
+								p = (p[0], -p[1]) # somehow our Y axis is inverted
+								if(math.isnan(p[0]) == False):
+									newPoints.append(p)
+						else:
+							#newPoints 	= [(vert.point.x,vert.point.y) for vert in item ]
+							for vert in item:
+								p = self.rotate_origin_only( (vert.point.x * sx, vert.point.y * sy), -math.radians(rx) )
+								p = (p[0] + tx, (p[1] + ty)*-1)
+
+								if(math.isnan(p[0]) == False):
+									newPoints.append(p)
+						if newPoints:
+							newPoly		= dwg.polyline(points=newPoints, stroke='black', stroke_width=1, fill='none')
+						if newPoly:
+							dwg.add(newPoly)
 
 
 		else:
